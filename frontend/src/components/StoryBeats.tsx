@@ -24,7 +24,7 @@ const StoryBeats = ({ story, simulationResults, currentBeatIndex }: StoryBeatsPr
         </span>
       </div>
       
-      <div className="space-y-8 p-4 m-4">
+      <div className="space-y-12 p-4 m-4 flex flex-col gap-4">
         {story.beats.map((beat, index) => {
           const result = simulationResults.find(r => r.beatId === beat.id);
           const isActive = index === currentBeatIndex;
@@ -33,24 +33,35 @@ const StoryBeats = ({ story, simulationResults, currentBeatIndex }: StoryBeatsPr
           return (
             <div 
               key={beat.id}
-              className={`rounded-xl shadow-lg transition-all duration-300 overflow-hidden ${
+              className={`rounded-xl shadow-xl hover:shadow-2xl transform transition-all duration-300 overflow-hidden 
+                backdrop-blur-sm bg-opacity-90 ${
                 isActive 
-                  ? 'border-2 border-blue-500 ring-2 ring-blue-400 ring-opacity-50' 
+                  ? 'border-2 border-blue-500 ring-2 ring-blue-400 ring-opacity-50 shadow-blue-500/20' 
                   : isCompleted 
-                    ? 'border border-green-500' 
-                    : 'border border-gray-700'
+                    ? 'border border-green-500 shadow-green-500/10' 
+                    : 'border border-gray-700 shadow-gray-800/30'
               }`}
+              style={{
+                margin: '1rem',
+                padding: '0.5rem',
+                // padding: '2rem',
+                boxShadow: isActive 
+                  ? '0 10px 25px -5px rgba(59, 130, 246, 0.3), 0 8px 10px -6px rgba(59, 130, 246, 0.2)' 
+                  : isCompleted 
+                    ? '0 10px 25px -5px rgba(16, 185, 129, 0.2), 0 8px 10px -6px rgba(16, 185, 129, 0.1)' 
+                    : '0 10px 25px -5px rgba(31, 41, 55, 0.3), 0 8px 10px -6px rgba(31, 41, 55, 0.2)'
+              }}
             >
               {/* Status indicator */}
               <div className={`h-1 w-full ${
                 isActive ? 'bg-blue-500' : isCompleted ? 'bg-green-500' : 'bg-gray-700'
               }`}></div>
               
-              <div className="p-5">
+              <div className="p-6 bg-gray-900/80">
                 {/* Beat header */}
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center">
-                    {/* <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium mr-2 ${
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium mr-2 ${
                       isActive 
                         ? 'bg-blue-500 text-white' 
                         : isCompleted 
@@ -58,7 +69,7 @@ const StoryBeats = ({ story, simulationResults, currentBeatIndex }: StoryBeatsPr
                           : 'bg-gray-800 text-gray-400'
                     }`}>
                       {index + 1}
-                    </div> */}
+                    </div>
                     <h3 className="font-bold text-lg">
                       {isCompleted && '✓ '}
                       {isActive && '→ '}
@@ -86,7 +97,7 @@ const StoryBeats = ({ story, simulationResults, currentBeatIndex }: StoryBeatsPr
                 
                 {/* AI Response */}
                 {result && (
-                  <div className="mt-5 bg-blue-900/20 rounded-lg p-4 border-l-4 border-blue-500">
+                  <div className="mt-5 bg-blue-900/20 rounded-lg p-4 border-l-4 border-blue-500 shadow-inner">
                     <div className="flex items-center mb-2">
                       <svg className="w-5 h-5 mr-2 text-blue-400 flex-shrink-0" 
                         width="20" 
@@ -105,7 +116,7 @@ const StoryBeats = ({ story, simulationResults, currentBeatIndex }: StoryBeatsPr
                 )}
                 
                 {isActive && !result && (
-                  <div className="mt-5 bg-gray-800/60 rounded-lg p-4 border border-dashed border-gray-600 text-center">
+                  <div className="mt-5 bg-gray-800/60 rounded-lg p-4 border border-dashed border-gray-600 text-center shadow-inner">
                     <p className="text-gray-400 italic">Waiting for AI response...</p>
                   </div>
                 )}

@@ -32,7 +32,7 @@ function App() {
   }
   
   return (
-    <div className="min-h-screen bg-gray-900 text-white py-8 px-4">
+    <div className="min-h-screen bg-gray-900 text-white">
       <header className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-2">AI Adventure Guide</h1>
         <p className="text-xl text-gray-400">
