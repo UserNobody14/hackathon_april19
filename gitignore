@@ -1,2 +1,3 @@
 gamebackend/.env
 .env
+*/.env
