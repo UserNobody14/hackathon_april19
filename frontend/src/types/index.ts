@@ -17,4 +17,9 @@ export interface SimulationResult {
   response: string;
 }
 
-export type SimulationResults = SimulationResult[]; 
+export type SimulationResults = SimulationResult[];
+
+export interface GoalEvaluation {
+  accomplished: boolean;
+  explanation: string;
+} 

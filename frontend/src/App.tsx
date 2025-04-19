@@ -4,6 +4,7 @@ import StoryBeats from './components/StoryBeats'
 import GuidanceInput from './components/GuidanceInput'
 import SimulationResults from './components/SimulationResults'
 import LoadingIndicator from './components/LoadingIndicator'
+import GoalEvaluation from './components/GoalEvaluation'
 import useAISimulation from './hooks/useAISimulation'
 import { sampleStories } from './data/sampleStories'
 import { Story } from './types'
@@ -18,7 +19,9 @@ function App() {
     isLoading,
     currentBeatIndex,
     results,
-    isComplete
+    isComplete,
+    goalEvaluation,
+    isEvaluating
   } = useAISimulation(selectedStory)
   
   const handleSelectStory = (story: Story) => {
@@ -100,15 +103,27 @@ function App() {
               results={results}
               isComplete={isComplete} 
             />
+            
+            {isComplete && (
+              <div className="max-w-4xl mx-auto">
+                <GoalEvaluation 
+                  evaluation={goalEvaluation}
+                  isEvaluating={isEvaluating}
+                  goal={selectedStory.goal}
+                />
+              </div>
+            )}
           </div>
         )}
       </main>
       
-      {isLoading && (
+      {(isLoading || isEvaluating) && (
         <LoadingIndicator message={
-          currentBeatIndex === 0 
-            ? "Starting your adventure..." 
-            : `Processing beat ${currentBeatIndex + 1}...`
+          isEvaluating 
+            ? "Evaluating if you achieved the goal..." 
+            : currentBeatIndex === 0 
+              ? "Starting your adventure..." 
+              : `Processing beat ${currentBeatIndex + 1}...`
         } />
       )}
       

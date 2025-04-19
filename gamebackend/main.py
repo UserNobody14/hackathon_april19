@@ -54,6 +54,17 @@ class SimulationResult(BaseModel):
     response: str
 
 
+class GoalEvaluationRequest(BaseModel):
+    goal: str
+    guidance: str
+    results: List[dict]
+
+
+class GoalEvaluationResponse(BaseModel):
+    accomplished: bool
+    explanation: str
+
+
 def get_anthropic_client():
     """Creates an Anthropic client."""
     return Anthropic(api_key=CLAUDE_API_KEY)
@@ -131,6 +142,66 @@ async def simulate_story(
         results.append({"beatId": result.beatId, "response": result.response})
 
     return {"results": results}
+
+
+@app.post("/api/evaluate-goal", response_model=GoalEvaluationResponse)
+async def evaluate_goal(
+    request: GoalEvaluationRequest, client: Anthropic = Depends(get_anthropic_client)
+):
+    """Evaluate whether the story goal was accomplished based on simulation results."""
+    try:
+        # Compile all simulation results into a narrative
+        narrative = ""
+        for result in request.results:
+            narrative += f"- {result['response']}\n"
+
+        # Construct the prompt for Claude
+        prompt = f"""
+You are an AI adventure guide evaluator. Analyze the following narrative and determine if the character achieved their goal.
+
+Story goal: {request.goal}
+
+User's guidance for the character: {request.guidance}
+
+Story events:
+{narrative}
+
+Evaluate whether the goal was accomplished. Provide your analysis as follows:
+1. First, determine if the goal was accomplished (yes or no)
+2. Then, provide a brief explanation (2-3 sentences) of your reasoning
+
+Format your response exactly as:
+ACCOMPLISHED: [true/false]
+EXPLANATION: [your explanation]
+"""
+
+        # Call Claude API
+        modelv: ModelParam = "claude-3-7-sonnet-latest"
+        message = client.messages.create(
+            model=modelv,
+            max_tokens=300,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.2,
+        )
+
+        # Extract Claude's response and parse the result
+        response_text = message.content[0].text
+        
+        # Parse the response to extract accomplished status and explanation
+        accomplished = False
+        explanation = "Unable to determine if goal was accomplished."
+        
+        for line in response_text.split('\n'):
+            if line.startswith("ACCOMPLISHED:"):
+                accomplished_text = line.replace("ACCOMPLISHED:", "").strip().lower()
+                accomplished = accomplished_text == "true"
+            elif line.startswith("EXPLANATION:"):
+                explanation = line.replace("EXPLANATION:", "").strip()
+        
+        return GoalEvaluationResponse(accomplished=accomplished, explanation=explanation)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 if __name__ == "__main__":

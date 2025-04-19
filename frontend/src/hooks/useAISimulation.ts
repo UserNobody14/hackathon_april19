@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Story, SimulationResult, SimulationResults } from '../types';
+import { Story, SimulationResult, SimulationResults, GoalEvaluation } from '../types';
 
 // API endpoint for our FastAPI backend
 const API_URL = 'http://localhost:8000';
@@ -37,11 +37,46 @@ const simulateBeat = async (
   }
 };
 
+// Evaluate if the goal was accomplished
+const evaluateGoal = async (
+  goal: string,
+  guidance: string,
+  results: SimulationResults
+): Promise<GoalEvaluation> => {
+  try {
+    const response = await fetch(`${API_URL}/api/evaluate-goal`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        goal,
+        guidance,
+        results: results.map(r => ({ beatId: r.beatId, response: r.response }))
+      }),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error evaluating goal:', error);
+    return {
+      accomplished: false,
+      explanation: 'Could not evaluate goal due to an error.'
+    };
+  }
+};
+
 export const useAISimulation = (story: Story | null) => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentBeatIndex, setCurrentBeatIndex] = useState(0);
   const [results, setResults] = useState<SimulationResults>([]);
   const [isComplete, setIsComplete] = useState(false);
+  const [goalEvaluation, setGoalEvaluation] = useState<GoalEvaluation | null>(null);
+  const [isEvaluating, setIsEvaluating] = useState(false);
 
   const runSimulation = useCallback(async (guidance: string) => {
     if (!story) return;
@@ -50,6 +85,7 @@ export const useAISimulation = (story: Story | null) => {
     setResults([]);
     setCurrentBeatIndex(0);
     setIsComplete(false);
+    setGoalEvaluation(null);
     
     try {
       // Option 1: Process beats one by one with UI updates between each
@@ -104,6 +140,12 @@ export const useAISimulation = (story: Story | null) => {
         console.error('Error processing story:', error);
       }
       */
+
+      // Now evaluate if the goal was accomplished
+      setIsEvaluating(true);
+      const evaluation = await evaluateGoal(story.goal, guidance, simulationResults);
+      setGoalEvaluation(evaluation);
+      setIsEvaluating(false);
       
     } catch (error) {
       console.error('Error in simulation:', error);
@@ -118,7 +160,9 @@ export const useAISimulation = (story: Story | null) => {
     isLoading,
     currentBeatIndex,
     results,
-    isComplete
+    isComplete,
+    goalEvaluation,
+    isEvaluating
   };
 };
 

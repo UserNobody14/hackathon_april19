@@ -15,12 +15,6 @@ const SimulationResults = ({ story, results, isComplete }: SimulationResultsProp
         {isComplete ? 'Adventure Complete!' : 'Adventure in Progress...'}
       </h2>
       
-      {isComplete && (
-        <div className="bg-green-900/30 border border-green-700 rounded-lg p-4 mb-6">
-          <h3 className="text-xl font-medium text-green-400 mb-2">Goal Reached</h3>
-          <p className="text-gray-300">{story.goal}</p>
-        </div>
-      )}
       
       <div className="space-y-6">
         {results.map((result, index) => {
