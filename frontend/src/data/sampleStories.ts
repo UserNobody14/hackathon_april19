@@ -104,5 +104,48 @@ export const sampleStories: Story[] = [
         order: 5,
       },
     ],
-  }
+  },
+
+
+
+
+
+
+
+{
+  id: 'story-2',
+  title: 'Space Explorer',
+  description: 'Command a spaceship on a mission to an uncharted planet.',
+  goal: 'Establish contact with an alien civilization.',
+  beats: [
+    {
+      id: 'beat-2-1',
+      text: 'Your ship emerges from hyperdrive near an uncharted planet. Sensors detect unusual energy readings from the surface.',
+      order: 1,
+    },
+    {
+      id: 'beat-2-2',
+      text: 'As you enter the atmosphere, your ship encounters turbulence. Warning lights flash on the control panel.',
+      order: 2,
+    },
+    {
+      id: 'beat-2-3',
+      text: 'After landing, you step out onto an alien landscape. Strange vegetation surrounds you, and the air is filled with unfamiliar scents.',
+      order: 3,
+    },
+    {
+      id: 'beat-2-4',
+      text: 'Your equipment detects movement in the distance. Something is approaching your landing site.',
+      order: 4,
+    },
+    {
+      id: 'beat-2-5',
+      text: 'You encounter a group of aliens. They communicate through a series of lights and sounds that your translator cannot interpret.',
+      order: 5,
+    },
+  ]
+}
+
+
+
 ]
