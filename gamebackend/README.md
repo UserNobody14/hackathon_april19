@@ -1,6 +1,6 @@
-# AI Adventure Guide Backend
+# AI Story Simulator Backend
 
-This is the FastAPI backend for the AI Adventure Guide application, which handles communication with Claude and provides API endpoints for the frontend.
+This is the FastAPI backend for the AI Story Simulator application, which handles communication with Claude and provides API endpoints for the frontend.
 
 ## Setup Instructions
 
@@ -31,7 +31,7 @@ The server will start on http://localhost:8000
 
 ### GET /
 - Returns a welcome message
-- Response: `{"message": "Welcome to AI Adventure Guide API"}`
+- Response: `{"message": "Welcome to AI Story Simulator API"}`
 
 ### POST /api/simulate-beat
 - Processes a single story beat with Claude

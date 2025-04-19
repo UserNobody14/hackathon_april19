@@ -34,9 +34,11 @@ const GuidanceInput = ({ story, onSubmitGuidance, isLoading }: GuidanceInputProp
             disabled={isLoading}
           />
           <div className="flex justify-between items-center">
+            {/* 
             <div>
               <h3 className="font-medium text-gray-300">Goal: <span className="text-blue-400">{story.goal}</span></h3>
-            </div>
+            </div> 
+            */}
             <button
               type="submit"
               disabled={!guidance.trim() || isLoading}

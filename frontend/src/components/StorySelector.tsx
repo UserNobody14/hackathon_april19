@@ -42,7 +42,6 @@ const StorySelector = ({ stories, onSelectStory }: StorySelectorProps) => {
             
             {expandedId === story.id && (
               <div className="mt-4">
-                <h4 className="font-medium mb-2">Goal: {story.goal}</h4>
                 <h4 className="font-medium mb-2">Story Beats:</h4>
                 <ul className="list-disc pl-5">
                   {story.beats.map((beat) => (

@@ -37,7 +37,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       <header className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-2">AI Adventure Guide</h1>
+        <h1 className="text-4xl font-bold mb-2">AI Story Simulator</h1>
         <p className="text-xl text-gray-400">
           Create your own AI-driven adventure by guiding your character through the story
         </p>
@@ -128,7 +128,7 @@ function App() {
       )}
       
       <footer className="text-center mt-20 text-gray-500 text-sm">
-        <p>AI Adventure Guide &copy; {new Date().getFullYear()}</p>
+        <p>AI Story Simulator &copy; {new Date().getFullYear()}</p>
       </footer>
     </div>
   )

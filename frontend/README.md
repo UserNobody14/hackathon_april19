@@ -1,4 +1,4 @@
-# AI Adventure Guide
+# AI Story Simulator
 
 A modern React + TypeScript application that allows users to guide AI characters through narrative adventures. Users can select from different stories, provide guidance for how their character should behave, and watch as the AI simulates the character's journey through the story beats.
 
